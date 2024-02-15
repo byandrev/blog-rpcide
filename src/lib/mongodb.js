@@ -37,3 +37,8 @@ export const Posts = async () => {
   const db = await getDB();
   return db.collection("posts");
 };
+
+export const Newsletter = async () => {
+  const db = await getDB();
+  return db.collection("newsletter");
+};

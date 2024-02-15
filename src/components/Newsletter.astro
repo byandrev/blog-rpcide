@@ -14,15 +14,64 @@ import Button from "./Button.astro";
       </p>
     </header>
 
-    <form>
+    <form id="newsletter-form">
       <div class="flex gap-2 flex-col md:flex-row">
         <input
           type="email"
+          id="newsleter-input"
           placeholder="email@example.com"
           class="bg-bg-alt rounded p-2"
         />
         <Button colorScheme="primary">Suscribete</Button>
       </div>
+
+      <p id="newsletter-msg"></p>
     </form>
   </div>
 </article>
+
+<script>
+  const form = document.querySelector("#newsletter-form");
+
+  if (form) {
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      sendForm();
+    });
+  }
+
+  function sendForm() {
+    const email = document.querySelector(
+      "#newsleter-input"
+    ) as HTMLInputElement;
+
+    if (!email.value || !email.value.includes("@")) return;
+
+    fetch(`/api/newsletter`, {
+      method: "POST",
+      body: JSON.stringify({ email: email.value }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        const msg = document.querySelector("#newsletter-msg");
+
+        if (data && msg) {
+          msg.textContent =
+            "Ahora haces parte de esta maravillosa comunidad ✨✨";
+          msg.className = "mt-4 text-green-500";
+        } else {
+          msg.textContent =
+            "Ocurrió  un error, puede que tu correo ya esté registrado o prueba más tarde";
+          msg.className = "mt-4 text-red-500";
+        }
+      })
+      .catch(() => {
+        const msg = document.querySelector("#newsletter-msg");
+
+        msg.textContent =
+          "Ocurrió  un error, puede que tu correo ya esté registrado o prueba más tarde";
+        msg.className = "mt-4 text-red-500";
+      });
+  }
+</script>
