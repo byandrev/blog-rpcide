@@ -26,7 +26,11 @@ const { data: user } = await userResponse.json();
 const content = marked.parse(data.content);
 ---
 
-<Layout title={`${data.title} - RPCIDE Blog`}>
+<Layout
+  image={data.banner}
+  title={`${data.title} - RPCIDE Blog`}
+  description={data.content.slice(0, 50)}
+>
   <section class="article-content">
     <p class="text-textAlt mb-4 first-letter:uppercase">
       <time>{dayjs(data.createdAt).format("MMMM D, YYYY")}</time>
